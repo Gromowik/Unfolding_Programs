@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Unfolding Programs
 
-## Getting Started
+Личная инкубаторная страница для **программ развёртки общения с ИИ**.
 
-First, run the development server:
+Программы здесь не «пишутся» заранее — они **разворачиваются** из бесед: поток → итерации → центры притяжения → модель → самостоятельная программа.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Идея
+
+- **Облака** — записи общения с ИИ в формате Markdown
+- **Центры** — то, к чему возвращаешься чаще всего; частота и важность показывают, что притягивает сильнее
+- **Два слоя** у каждого центра:
+  - **Сохраняется** — ясное правило, инвариант
+  - **Проекция** — личное пояснение через текущие модели (может меняться)
+- **Спираль развёртки** — беседа считывается пошагово, на каждом витке виднее главные центры
+
+> *ИИ не завершает мысль, а создаёт уточняющие колебания, которые формируют центры притяжения и растят модель.*
+
+## Страницы
+
+| Путь | Описание |
+|------|----------|
+| `/` | Главная: описание проекта, спираль, список облаков |
+| `/clouds/[slug]` | Чтение одной беседы в удобном режиме |
+| `/rules` | Пример развёртки центров из `start_2.md` — шаблон для всех облаков |
+
+## Облака на главной
+
+На странице показываются только файлы из:
+
+```
+public/development/is_in.md/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Папка `public/development/ucheba/` и остальные беседы в `development/` **не выводятся** — они остаются черновиками и архивом.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Стартовые облака** (закреплены вверху, бейдж «старт»):
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `start.md`
+- `start_2.md`
 
-## Learn More
+## Быстрый старт
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Открой [http://localhost:3000](http://localhost:3000).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build   # сборка
+npm run start   # продакшен локально
+npm run lint    # eslint
+```
 
-## Deploy on Vercel
+## Как добавить облако
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Положи `.md` файл в `public/development/is_in.md/`
+2. Перезапусти dev-сервер (или пересобери проект)
+3. Облако появится на главной; страница чтения — `/clouds/имя-файла`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Имя файла `моя-беседа.md` → адрес `/clouds/моя-беседа`.
+
+## Как добавить или изменить центры
+
+Пример центров (семь правил программирования из `start_2.md`) лежит в:
+
+```
+lib/rulesContent.ts   — данные центров
+lib/centers.ts        — типы, спираль, метрики важности
+```
+
+У каждого центра можно задать:
+
+- `invariant` — что сохраняется
+- `projection` — личная проекция
+- `importance` — важность (1–5)
+- `frequency` — частота в исходном тексте
+- `visualModel` — ссылка на отдельную визуальную модель (опционально)
+
+Чтобы пометить новое облако как стартовое, добавь slug в `ORIGIN_SLUGS` в `lib/content.ts`.
+
+## Структура проекта
+
+```
+app/
+  page.tsx              # главная
+  rules/page.tsx        # центры и проекции
+  clouds/[slug]/page.tsx # чтение беседы
+
+components/
+  HomePage.tsx          # layout главной
+  CloudLibrary.tsx      # список и поиск облаков
+  CloudReader.tsx       # страница чтения
+  RulesPage.tsx         # страница центров
+  SpiralFlow.tsx        # визуализация спирали
+
+lib/
+  content.ts            # сканирование is_in.md
+  parseDocument.ts      # парсер беседы → блоки
+  centers.ts            # тип центра, спираль
+  rulesContent.ts       # пример центров
+
+public/development/
+  is_in.md/             # облака, видимые на сайте
+  ucheba/               # учебные материалы (скрыты)
+  …                     # прочие черновики
+```
+
+## Стек
+
+- [Next.js 16](https://nextjs.org) (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS 4
+
+## Связанные проекты
+
+- [Math Engine](https://math-engine-olive.vercel.app/pages/10) — модель D · E · A · C, на которую ссылаются проекции на `/rules`
+
+---
+
+*Unfolding Programs — semantic unfolding. Программа растёт из общения.*

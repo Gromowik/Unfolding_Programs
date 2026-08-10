@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# development drafts — only is_in.md clouds are published
+/public/development/*
+!/public/development/is_in.md/
+!/public/development/is_in.md/**
