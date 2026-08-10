@@ -2,7 +2,6 @@ export type DocumentBlock =
   | { type: "heading"; level: 1 | 2 | 3; content: string; id: string }
   | { type: "code"; language?: string; content: string }
   | { type: "date"; content: string }
-  | { type: "turn"; role: "user" | "assistant"; content: string }
   | { type: "paragraph"; content: string };
 
 export type ParsedDocument = {
@@ -23,19 +22,6 @@ function slugify(text: string, index: number): string {
 function isMetaLine(block: string): boolean {
   return /^(Heute|Unterhaltung mit Gemini|Conversation with Gemini)$/i.test(
     block.trim(),
-  );
-}
-
-function isAssistantBlock(block: string): boolean {
-  return (
-    /^[\p{Extended_Pictographic}]/u.test(block) ||
-    /^(Ты сейчас|Громовик,|Да, я потом|Копилот,|Привет!|Согласен на все|Sag mir|Насчёт|Хочешь, я могу помочь)/u.test(
-      block,
-    ) ||
-    block.includes("Короткий вывод") ||
-    block.includes("Я предлагаю внести") ||
-    block.includes("🚀") ||
-    block.includes("💡")
   );
 }
 
@@ -81,7 +67,11 @@ export function parseDocument(raw: string): ParsedDocument {
       const headingLevel = isHeadingLine(firstLine);
       if (headingLevel && lines.length === 1) {
         const id = slugify(firstLine.replace(/^#+\s+/, ""), headingIndex++);
-        headings.push({ id, level: headingLevel, content: firstLine.replace(/^#+\s+/, "") });
+        headings.push({
+          id,
+          level: headingLevel,
+          content: firstLine.replace(/^#+\s+/, ""),
+        });
         blocks.push({
           type: "heading",
           level: headingLevel,
@@ -97,25 +87,18 @@ export function parseDocument(raw: string): ParsedDocument {
           firstLine.startsWith("📁") ||
           firstLine.startsWith("📄"))
       ) {
+        const id = slugify(firstLine, headingIndex++);
+        headings.push({ id, level: 2, content: firstLine });
         blocks.push({
           type: "heading",
           level: 2,
           content: firstLine,
-          id: slugify(firstLine, headingIndex++),
-        });
-        headings.push({
-          id: slugify(firstLine, headingIndex - 1),
-          level: 2,
-          content: firstLine,
+          id,
         });
         continue;
       }
 
-      blocks.push({
-        type: "turn",
-        role: isAssistantBlock(paragraph) ? "assistant" : "user",
-        content: paragraph,
-      });
+      blocks.push({ type: "paragraph", content: paragraph });
     }
   }
 

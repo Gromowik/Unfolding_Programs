@@ -55,32 +55,12 @@ export function DocumentContent({ parsed }: DocumentContentProps) {
               </div>
             );
 
-          case "turn": {
-            const isUser = block.role === "user";
-            return (
-              <article
-                key={i}
-                className={`rounded-xl border px-4 py-4 sm:px-5 ${
-                  isUser
-                    ? "mr-0 border-sky-500/20 bg-sky-500/5 sm:mr-12"
-                    : "ml-0 border-violet-500/20 bg-violet-500/5 sm:ml-12"
-                }`}
-              >
-                <p
-                  className={`mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] ${
-                    isUser ? "text-sky-400/70" : "text-violet-400/70"
-                  }`}
-                >
-                  {isUser ? "Громовик" : "ИИ · развёртка"}
-                </p>
-                <FormattedText text={block.content} />
-              </article>
-            );
-          }
-
           case "paragraph":
             return (
-              <div key={i} className="rounded-xl border border-white/6 px-4 py-4">
+              <div
+                key={i}
+                className="rounded-xl border border-white/6 bg-white/[0.02] px-4 py-4 sm:px-5"
+              >
                 <FormattedText text={block.content} />
               </div>
             );

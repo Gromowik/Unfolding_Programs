@@ -5,6 +5,7 @@ import {
   parseDocument,
   type ParsedDocument,
 } from "./parseDocument";
+import { ensureUniqueSlugs, toUrlSlug } from "./slug";
 
 export type DevelopmentDocument = {
   slug: string;
@@ -62,21 +63,27 @@ function extractPreview(raw: string): string {
   return line.length > 140 ? `${line.slice(0, 137)}…` : line;
 }
 
+function buildSlugMap(filenames: string[]): Map<string, string> {
+  const entries = filenames.map((filename) => ({
+    filename,
+    slug: toUrlSlug(filename),
+  }));
+  return ensureUniqueSlugs(entries);
+}
+
 function buildDocumentMeta(
   filename: string,
-  filePath: string,
+  urlSlug: string,
   raw: string,
   stats: fs.Stats,
 ): DevelopmentDocument {
-  const slug = filename.replace(/\.md$/i, "");
-
   return {
-    slug,
+    slug: urlSlug,
     filename,
     title: extractTitle(raw, filename),
     preview: extractPreview(raw),
     sourcePath: `${CLOUDS_PUBLIC_PREFIX}/${filename}`,
-    status: getDocumentStatus(slug),
+    status: getDocumentStatus(urlSlug),
     readingMinutes: estimateReadingMinutes(raw),
     modifiedAt: stats.mtime.toISOString(),
     sizeKb: Math.round(stats.size / 1024),
@@ -86,15 +93,19 @@ function buildDocumentMeta(
 export function getDevelopmentDocuments(): DevelopmentDocument[] {
   if (!fs.existsSync(CLOUDS_DIR)) return [];
 
-  const files = fs
+  const filenames = fs
     .readdirSync(CLOUDS_DIR, { withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
-    .map((entry) => {
-      const filePath = path.join(CLOUDS_DIR, entry.name);
-      const raw = fs.readFileSync(filePath, "utf-8");
-      const stats = fs.statSync(filePath);
-      return buildDocumentMeta(entry.name, filePath, raw, stats);
-    });
+    .map((entry) => entry.name);
+
+  const slugMap = buildSlugMap(filenames);
+
+  const files = filenames.map((filename) => {
+    const filePath = path.join(CLOUDS_DIR, filename);
+    const raw = fs.readFileSync(filePath, "utf-8");
+    const stats = fs.statSync(filePath);
+    return buildDocumentMeta(filename, slugMap.get(filename)!, raw, stats);
+  });
 
   return files.sort((a, b) => {
     const originDiff = originSortIndex(a.slug) - originSortIndex(b.slug);
@@ -103,19 +114,35 @@ export function getDevelopmentDocuments(): DevelopmentDocument[] {
   });
 }
 
+function findDocument(slug: string): DevelopmentDocument | null {
+  const decoded = decodeURIComponent(slug);
+  const documents = getDevelopmentDocuments();
+
+  return (
+    documents.find(
+      (doc) =>
+        doc.slug === decoded ||
+        doc.filename === `${decoded}.md` ||
+        toUrlSlug(`${decoded}.md`) === doc.slug,
+    ) ?? null
+  );
+}
+
 export function getDocumentBySlug(slug: string): {
   meta: DevelopmentDocument;
   parsed: ParsedDocument;
 } | null {
-  const filePath = path.join(CLOUDS_DIR, `${slug}.md`);
+  const meta = findDocument(slug);
+  if (!meta) return null;
+
+  const filePath = path.join(CLOUDS_DIR, meta.filename);
   if (!fs.existsSync(filePath)) return null;
 
   const raw = fs.readFileSync(filePath, "utf-8");
   const stats = fs.statSync(filePath);
-  const filename = `${slug}.md`;
 
   return {
-    meta: buildDocumentMeta(filename, filePath, raw, stats),
+    meta: buildDocumentMeta(meta.filename, meta.slug, raw, stats),
     parsed: parseDocument(raw),
   };
 }
