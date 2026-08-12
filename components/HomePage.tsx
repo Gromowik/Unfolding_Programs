@@ -194,6 +194,14 @@ export function HomePage({ documents }: HomePageProps) {
             >
               Plus / Minus Neiron ↗
             </a>
+            <a
+              href="https://b-neuron.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 transition hover:text-violet-300"
+            >
+              BNeuron ↗
+            </a>
           </div>
         </footer>
       </main>
