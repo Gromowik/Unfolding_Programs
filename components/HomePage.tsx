@@ -202,6 +202,14 @@ export function HomePage({ documents }: HomePageProps) {
             >
               BNeuron ↗
             </a>
+            <a
+              href="https://next-project-vert-one.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 transition hover:text-violet-300"
+            >
+              Phenomenal Quiz ↗
+            </a>
           </div>
         </footer>
       </main>
