@@ -177,7 +177,7 @@ export function HomePage({ documents }: HomePageProps) {
               serge.gromowik@gmail.com
             </a>
           </p>
-          <div className="mt-6 flex flex-col gap-2 text-sm sm:flex-row sm:gap-6">
+          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <a
               href="https://math-engine-olive.vercel.app/"
               target="_blank"
@@ -209,6 +209,30 @@ export function HomePage({ documents }: HomePageProps) {
               className="text-zinc-400 transition hover:text-violet-300"
             >
               Phenomenal Quiz ↗
+            </a>
+            <a
+              href="https://models-pi-nine.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 transition hover:text-violet-300"
+            >
+              Models ↗
+            </a>
+            <a
+              href="https://technology-and-repair.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 transition hover:text-violet-300"
+            >
+              Технологии и ремонт ↗
+            </a>
+            <a
+              href="https://calendar-woad-ten.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 transition hover:text-violet-300"
+            >
+              Kalender Hub ↗
             </a>
           </div>
         </footer>
