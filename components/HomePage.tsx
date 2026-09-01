@@ -99,7 +99,25 @@ export function HomePage({ documents }: HomePageProps) {
           </div>
         </section>
 
-        <section className="mb-16">
+        <section className="mb-16 grid gap-4 sm:grid-cols-2">
+          <Link
+            href="/centers"
+            className="group block rounded-2xl border border-violet-500/25 bg-gradient-to-br from-violet-500/[0.08] to-transparent p-6 transition hover:border-violet-500/40 sm:p-8"
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-400/80">
+              Главный профиль
+            </p>
+            <h2 className="mt-2 text-xl font-semibold text-white">
+              Карта центров
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+              Карточки с мощностью, весом и связями трансляции — кто кого
+              использует и насколько сильно.
+            </p>
+            <span className="mt-4 inline-block text-sm text-violet-300/80 transition group-hover:text-violet-200">
+              открыть →
+            </span>
+          </Link>
           <Link
             href="/rules"
             className="group block rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/[0.06] to-transparent p-6 transition hover:border-amber-500/35 sm:p-8"

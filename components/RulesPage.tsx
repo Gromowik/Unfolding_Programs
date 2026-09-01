@@ -164,12 +164,20 @@ export function RulesPage() {
             центры, проставить метрики — и где нужно, добавить визуальную
             модель перед программой.
           </p>
-          <Link
-            href={`/clouds/${rulesIntro.source.slug}`}
-            className="mt-4 inline-block text-sm text-violet-400 transition hover:text-violet-300"
-          >
-            Читать полное облако start_2 →
-          </Link>
+          <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-4">
+            <Link
+              href="/centers"
+              className="text-sm text-violet-400 transition hover:text-violet-300"
+            >
+              Карта центров с трансляциями →
+            </Link>
+            <Link
+              href={`/clouds/${rulesIntro.source.slug}`}
+              className="text-sm text-zinc-500 transition hover:text-violet-300"
+            >
+              Читать облако start_2 →
+            </Link>
+          </div>
         </footer>
       </main>
     </div>
