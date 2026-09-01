@@ -99,7 +99,7 @@ export function HomePage({ documents }: HomePageProps) {
           </div>
         </section>
 
-        <section className="mb-16 grid gap-4 sm:grid-cols-2">
+        <section className="mb-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link
             href="/centers"
             className="group block rounded-2xl border border-violet-500/25 bg-gradient-to-br from-violet-500/[0.08] to-transparent p-6 transition hover:border-violet-500/40 sm:p-8"
@@ -133,6 +133,24 @@ export function HomePage({ documents }: HomePageProps) {
               проекциями — шаблон для всех облаков.
             </p>
             <span className="mt-4 inline-block text-sm text-amber-300/80 transition group-hover:text-amber-200">
+              открыть →
+            </span>
+          </Link>
+          <Link
+            href="/objects"
+            className="group block rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/[0.06] to-transparent p-6 transition hover:border-emerald-500/35 sm:p-8"
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-400/80">
+              Модели и программы
+            </p>
+            <h2 className="mt-2 text-xl font-semibold text-white">
+              Объекты и проекции
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+              Один объект в разных программах — стороны отображения,
+              дополняющие понимание.
+            </p>
+            <span className="mt-4 inline-block text-sm text-emerald-300/80 transition group-hover:text-emerald-200">
               открыть →
             </span>
           </Link>

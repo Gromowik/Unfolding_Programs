@@ -100,12 +100,18 @@ export function CentersHub({ centers }: CentersHubProps) {
           ))}
         </div>
 
-        <footer className="mt-12 text-center">
+        <footer className="mt-12 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-4">
+          <Link
+            href="/objects"
+            className="text-sm text-emerald-400/80 transition hover:text-emerald-300"
+          >
+            Объекты и проекции →
+          </Link>
           <Link
             href="/rules"
             className="text-sm text-zinc-500 transition hover:text-violet-300"
           >
-            Правила и проекции (развёртка start_2) →
+            Правила и проекции →
           </Link>
         </footer>
       </main>
