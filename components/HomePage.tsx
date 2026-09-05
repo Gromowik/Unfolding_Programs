@@ -70,6 +70,22 @@ export function HomePage({ documents }: HomePageProps) {
               формируют центры притяжения и растят модель.
             </p>
           </blockquote>
+
+          <Link
+            href="/read"
+            className="group mt-6 block rounded-xl border border-sky-500/25 bg-gradient-to-br from-sky-500/[0.08] to-transparent px-5 py-4 transition hover:border-sky-500/40"
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-400/80">
+              Reading
+            </p>
+            <p className="mt-1 text-[15px] font-medium text-white transition group-hover:text-sky-100">
+              Направления развития →
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-zinc-400">
+              Четыре этапа анализа, спираль, связь облако · центр · объект ·
+              программа — главные соображения для мотивации и развития.
+            </p>
+          </Link>
         </section>
 
         <section className="mb-16">

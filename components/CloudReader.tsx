@@ -9,9 +9,20 @@ import { ReadingProgress } from "./ReadingProgress";
 type CloudReaderProps = {
   document: DevelopmentDocument;
   parsed: ParsedDocument;
+  backHref?: string;
+  backLabel?: string;
+  badge?: string;
+  displayTitle?: string;
 };
 
-export function CloudReader({ document, parsed }: CloudReaderProps) {
+export function CloudReader({
+  document,
+  parsed,
+  backHref = "/",
+  backLabel = "← все облака",
+  badge,
+  displayTitle,
+}: CloudReaderProps) {
   return (
     <>
       <ReadingProgress />
@@ -50,19 +61,20 @@ export function CloudReader({ document, parsed }: CloudReaderProps) {
           <article className="min-w-0 flex-1">
             <header className="mb-10 border-b border-white/8 pb-8">
               <Link
-                href="/"
+                href={backHref}
                 className="inline-flex items-center gap-2 text-sm text-zinc-500 transition hover:text-violet-300"
               >
-                ← все облака
+                {backLabel}
               </Link>
 
               <p className="mt-6 text-xs font-medium uppercase tracking-[0.2em] text-violet-400/80">
-                {document.status === "origin"
-                  ? "Стартовое облако"
-                  : "Unfolding Cloud"}
+                {badge ??
+                  (document.status === "origin"
+                    ? "Стартовое облако"
+                    : "Unfolding Cloud")}
               </p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                {document.title}
+                {displayTitle ?? document.title}
               </h1>
               <p className="mt-3 text-sm text-zinc-500">
                 {document.filename} · ~{document.readingMinutes} мин чтения ·{" "}
